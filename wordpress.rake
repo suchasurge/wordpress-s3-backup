@@ -40,6 +40,7 @@ require 'aws/s3'
 #   DBNAME        - The name of your WordPress mysql database. You can get this from the wp-config.php file of your wordpress installation.
 #   DBUSER        - The username of your WordPress mysql database. You can get this from the wp-config.php file of your wordpress installation.
 #   DBPASSWORD    - The password your WordPress mysql database. You can get this from the wp-config.php file of your wordpress installation.
+#   DBHOST        - The Host of your Database. To backup from an external database. Default is: localhost.
 #   PATHTOSITE    - The path to your WordPress blog. For example, /home/USER/public_html
 #   S3ACCESSKEYID - Your access key ID for Amazon S3
 #   S3SECRETKEY   - Your secret access key for Amazon S3
@@ -50,6 +51,7 @@ require 'aws/s3'
 DBNAME = "your wordpress database name"
 DBUSER = "your wordpress database username"
 DBPASSWORD = "your wordpress database password"
+DBHOST = "localhost"
 PATHTOSITE = "/YOUR/HOME/public_html"
 S3ACCESSKEYID = "your Amazon S3 access id"
 S3SECRETKEY = "your Amazon S3 secret key"
@@ -74,6 +76,7 @@ namespace :wordpress do
 
       msg "Dumping database"
       cmd = "mysqldump --opt --skip-add-locks -u#{DBUSER} "
+      cmd += " -h'#{DBHOST}' "
       puts cmd + "... [password filtered]"
       cmd += " -p'#{DBPASSWORD}' " unless DBPASSWORD.empty?
       cmd += " #{DBNAME} > #{backup}"
