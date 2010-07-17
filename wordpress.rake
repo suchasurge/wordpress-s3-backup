@@ -217,7 +217,7 @@ end
   end
 
   def make_bucket(name)
-    AWS::S3::Bucket.create(bucket_name(name))
+    AWS::S3::Bucket.create(bucket_name(name)) unless AWS::S3::Service.buckets.map(&:name).include?(bucket_name(name))
     msg "Using bucket #{bucket_name(name)}"
   end
   
