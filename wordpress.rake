@@ -222,7 +222,7 @@ end
   end
   
   def bucket_name(name)
-    "#{S3BUCKETNAME}_#{name}"
+    "#{S3BUCKETNAME}-#{name}"
   end
 
   def backup_name(name)
