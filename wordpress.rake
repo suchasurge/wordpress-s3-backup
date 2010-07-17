@@ -44,6 +44,8 @@ require 'aws/s3'
 #   S3ACCESSKEYID - Your access key ID for Amazon S3
 #   S3SECRETKEY   - Your secret access key for Amazon S3
 #   S3BUCKETNAME  - The name of the bucket where the backups will be stored.  No spaces or weird characters.  Underscores are okay.
+#   SERVER        - The specific server adress. To use with amazon s3 based providers. i.e. dunkel.de
+#                   Default for Amazon S3 is: s3.amazonaws.com
 
 DBNAME = "your wordpress database name"
 DBUSER = "your wordpress database username"
@@ -52,6 +54,7 @@ PATHTOSITE = "/YOUR/HOME/public_html"
 S3ACCESSKEYID = "your Amazon S3 access id"
 S3SECRETKEY = "your Amazon S3 secret key"
 S3BUCKETNAME = "name_of_your_blog"
+SERVER = "s3.amazonaws.com"
 
 
 
@@ -139,7 +142,7 @@ end
   
   # Open a connection to Amazon S3  
   def s3_connect
-    AWS::S3::Base.establish_connection!(:access_key_id => "#{S3ACCESSKEYID}", :secret_access_key => "#{S3SECRETKEY}", :use_ssl => true)
+    AWS::S3::Base.establish_connection!(:server => "#{SERVER}", :access_key_id => "#{S3ACCESSKEYID}", :secret_access_key => "#{S3SECRETKEY}", :use_ssl => true)
   end
 
   # Zip up the files and send to S3
