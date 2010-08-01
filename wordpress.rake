@@ -47,6 +47,7 @@ require 'aws/s3'
 #   S3BUCKETNAME  - The name of the bucket where the backups will be stored.  No spaces or weird characters.  Underscores are okay.
 #   SERVER        - The specific server adress. To use with amazon s3 based providers. i.e. dunkel.de
 #                   Default for Amazon S3 is: s3.amazonaws.com
+#   TMP_PATH      - This is where your tmp Files live.
 
 DBNAME = "your wordpress database name"
 DBUSER = "your wordpress database username"
@@ -57,6 +58,7 @@ S3ACCESSKEYID = "your Amazon S3 access id"
 S3SECRETKEY = "your Amazon S3 secret key"
 S3BUCKETNAME = "name_of_your_blog"
 SERVER = "s3.amazonaws.com"
+TMP_PATH = "/PATH/TO/TMP/DIR"
 
 
 
@@ -72,7 +74,7 @@ namespace :wordpress do
       
       msg "Initiating database backup"
       make_bucket('db')
-      backup = "/tmp/#{backup_name('db')}"
+      backup = "#{TMP_PATH}/#{backup_name('db')}"
 
       msg "Dumping database"
       cmd = "mysqldump --opt --skip-add-locks -u#{DBUSER} "
@@ -92,7 +94,7 @@ namespace :wordpress do
 
       msg "Initiating site backup"
       make_bucket('site')
-      backup = "/tmp/#{backup_name('site')}"
+      backup = "#{TMP_PATH}/#{backup_name('site')}"
 
       cmd = "cp -rp #{PATHTOSITE} #{backup}"
       msg "Making copy of site"
@@ -150,7 +152,7 @@ end
 
   # Zip up the files and send to S3
   def s3_transmit(name, tmp_file)
-    backup = "/tmp/#{backup_name(name)}.tar.gz"
+    backup = "#{TMP_PATH}/#{backup_name(name)}.tar.gz"
 
     msg "Building tar backup for #{name}"
     cmd = "tar -cpzf #{backup} #{tmp_file}"
